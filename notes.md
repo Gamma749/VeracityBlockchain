@@ -33,7 +33,10 @@ Trust is kept at a deeper level by cryptographic primitives of hash functions an
 ## Smart Contracts
 Get some code to run on the blockchain
 Nick Szabo, 1996: "A set of promises specified in digital form, including protocols, within which the parties perform on those promises"
-Basically code on a blockchain, executed when a condition is met. Some people are using these in place of hard/traditional contracts but this leaves some legal holes that may need to be avoided.
+Basically code on a blockchain, executed when a condition is met. Some people are using these in place of hard/traditional contracts but this leaves some legal holes that may need to be avoided. Traditional contracts are only as valuable as enforcement (enforced by the state) so illegal contracts are worthless. Smart contracts are enforced by computing (code is seen by parties on the blockchain and is agreed to, and that code will be executed by a correct node when the contract is triggered). If something goes wrong, we must defer back to the state, however!
+
+Some claim smart contracts could replace legal system in places where legal system is not great (e.g. third world). This seems overly trusting.
+Smart contracts could remove obscurity or ambiguity from contracts. Could be good clarity (although a layperson may have no better chance of understanding it) but that is not always a good thing
 
 ## Consensus and Consensus Protocols
 - Generally support the longest chain, as this removes forks and prevents inconsistent groups forming.
