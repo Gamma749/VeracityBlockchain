@@ -57,4 +57,6 @@ Basically code on a blockchain, executed when a condition is met. Some people ar
 - Crash Fault: When a node goes offline. Usually not a big issue, as ledger is distributed, so other nodes continue to work. May be an issue if node drops out during non-idle periods (e.g. if using proof of stake and a node is selected as a block creator, but dies?)
   - Also ensure that crash faults do not significantly impact malicious factor
 - Byzantine Fault: When a node is still online and communicating but is in an incorrect state relative to the consensus. How to correct the node? Or how to identify the incorrect node from all nodes when receiving messages? If many incorrect nodes, what is the fault tolerance?
+- Forks: If a blockchain is forked then there may be two or more groups that think they are consistent within a group but are inconsistent between groups. If a fork is not immediately recognized then it may be very difficult to reconcile the forks.
+- Network attack: If a malicious actor can control the network between nodes and tamper with communication here, it is possible to control the blockchain. We could combat this with TLS or other encryption of messages, or maybe digital signatures. 
 
