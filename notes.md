@@ -16,6 +16,13 @@ A blockchain is a chain of blocks. The initial block (the genesis block) referen
 
 A single block in the chain consists of a header and a body of events that occurred on this block. Each event is hashed and placed into a Merkle tree, the root of which is placed into the header, although this is not the only way to verify all transactions. Using a Merkle tree does make it very easy to identify which transaction has been tampered with quickly. Common header fields include the previous block hash (required), the Merkle tree root hash (or other verification of events), a timestamp (although not needed if blocks are in order). Other fields include a version, a nonce (number appended to get hash value required, particularly proof of work). Once a block is created, it is added to the blockchain and distributed to all other nodes. Other nodes can verify using the nonce and previous hash.
 
+In the network as a whole, there are several different nodes that exist (in Bitcoin example, how do these change in other blockchains):
+- Full Nodes: Store full blockchain and can validate transactions (e.g. knows how much is in each wallet)
+- Pruning Nodes: Prune transactions after validation and aging
+- Lightweight Nodes: Store headers only (also SPV nodes)
+- Miners: Perform PoW and create new blocks - not necessarily Full Nodes as pool operators can do that
+
+
 ## Trust
 Because all blocks reference backwards to the genesis block, it is possible to trace all trust back to this genesis block (where all nodes should agree, as nothing has yet occurred) by checking hashes and Merkle trees. Thus all trust is traced back to the initial trust event.
 
