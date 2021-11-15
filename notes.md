@@ -29,6 +29,9 @@ Because all blocks reference backwards to the genesis block, it is possible to t
 Trust is kept at a deeper level by cryptographic primitives of hash functions and encryption, which are mathematically "good enough" (not guaranteed) to give unique outputs for each input. If a collision (or worse) occurs this can undermine the effectiveness of a blockchain as trust cannot be ensured.
 
 ## Permissioned vs Permissionless
+Permissioned systems have nodes that have been validated and trusted before they are allowed to write new blocks. In this way, there is little need for consensus algorithms, as the number of nodes is usually a lot lower and there is no need to prove you have some stake in the system. However, this is still a need to address faults (particularly Byzantine faults) and we may want to investigate how we remove trust in a permissioned system when that trust is lost (due to an incorrect node or malicious actor). Hyperledger is a permissioned system.
+
+Permissionless systems have nodes which are *not* validated and hence must prove their work before being trusted, requiring consensus protocols. Bitcoin is an example, and permissionless systems generally scale better (at least from the user joining aspect, quantifying how the extra overhead of consensus protocols impacts this is difficult).
 
 ## Smart Contracts
 Get some code to run on the blockchain
