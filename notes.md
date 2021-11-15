@@ -28,6 +28,13 @@ Because all blocks reference backwards to the genesis block, it is possible to t
 
 Trust is kept at a deeper level by cryptographic primitives of hash functions and encryption, which are mathematically "good enough" (not guaranteed) to give unique outputs for each input. If a collision (or worse) occurs this can undermine the effectiveness of a blockchain as trust cannot be ensured.
 
+## Permissioned vs Permissionless
+
+## Smart Contracts
+Get some code to run on the blockchain
+Nick Szabo, 1996: "A set of promises specified in digital form, including protocols, within which the parties perform on those promises"
+Basically code on a blockchain, executed when a condition is met. Some people are using these in place of hard/traditional contracts but this leaves some legal holes that may need to be avoided.
+
 ## Consensus and Consensus Protocols
 
 ## Attacks and Issues
