@@ -62,4 +62,4 @@ Smart contracts could remove obscurity or ambiguity from contracts. Could be goo
 - Byzantine Fault: When a node is still online and communicating but is in an incorrect state relative to the consensus. How to correct the node? Or how to identify the incorrect node from all nodes when receiving messages? If many incorrect nodes, what is the fault tolerance?
 - Forks: If a blockchain is forked then there may be two or more groups that think they are consistent within a group but are inconsistent between groups. If a fork is not immediately recognized then it may be very difficult to reconcile the forks.
 - Network attack: If a malicious actor can control the network between nodes and tamper with communication here, it is possible to control the blockchain. We could combat this with TLS or other encryption of messages, or maybe digital signatures. 
-
+- Privacy: Consider something like GDPR which allows for people to request (see: demand) their private information to be deleted. In blockchain, an append only system, deletion doesn't truly exist. What to do here?
