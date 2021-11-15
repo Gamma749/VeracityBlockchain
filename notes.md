@@ -36,7 +36,19 @@ Nick Szabo, 1996: "A set of promises specified in digital form, including protoc
 Basically code on a blockchain, executed when a condition is met. Some people are using these in place of hard/traditional contracts but this leaves some legal holes that may need to be avoided.
 
 ## Consensus and Consensus Protocols
-
+- Generally support the longest chain, as this removes forks and prevents inconsistent groups forming.
+- Consensus protocols allow for distributed networks to all agree on something (here, a block). In blockchain we use consensus protocols to choose who creates the next block
+  - Proof of Work: miners compete to find solution to a computationally intensive NP-problem (so it is hard to solve but easy for other nodes to verify). In Bitcoin: change a nonce value in header of block to find hash of block with a certain amount of leading 0's. Miners have incentive to mine in the form of native currency rewards (e.g. some bitcoin per mined block).
+    - PoW uses a huge amount of energy on effectively no useful work, so it has massive environmental impacts.
+  - Proof of Stake: some nodes are picked out from all nodes as the block creators of the next block. These nodes create the next block and sign it, distributing the new block across the network.
+    - Because the creator nodes are chosen (randomly) it means there is no need for intense races to make the next block (PoW). There is also no need for incentives, as sometimes being a block creator is part of the contract each user agrees to when using the blockchain.
+    - How to choose a block creator? How do we determine stake in an arbitrary system?
+    - What if a block creator suffers a Crash Fault? What if a block creator is malicious? 
+  - Proof of Authority: 
+  - Proof of Activity:
+  - Proof of Burn: 
+  - Proof of Capacity:
+  - 
 ## Attacks and Issues
 - Malicious actors on the blockchain can exploit it, such as by giving incorrect information (Byzantine fault) or by creating false events(?). How to identify malicious nodes? How to ignore incorrect messages? How to punish malicious actors (e.g. ban from blockchain)
 - Joining a blockchain requires knowing all blocks back to the genesis block. We can somewhat cut down on download size by only looking at headers however then we would have to trust further to get the current state of the system from others, e.g. we get told how much each wallet contains.
