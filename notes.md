@@ -92,3 +92,6 @@ executed and blockchain (being append only) cannot undo the contract without
 - Forks: If a blockchain is forked then there may be two or more groups that think they are consistent within a group but are inconsistent between groups. If a fork is not immediately recognized then it may be very difficult to reconcile the forks.
 - Network attack: If a malicious actor can control the network between nodes and tamper with communication here, it is possible to control the blockchain. We could combat this with TLS or other encryption of messages, or maybe digital signatures. 
 - Privacy: Consider something like GDPR which allows for people to request (see: demand) their private information to be deleted. In blockchain, an append only system, deletion doesn't truly exist. What to do here?
+- Timing: If timestampts involved and used in any sort of verification, can we
+  ensure that timings are consistent across the network, or that nothing
+  changes in those verifications before being pushed to the ledger?
