@@ -41,6 +41,32 @@ Basically code on a blockchain, executed when a condition is met. Some people ar
 Some claim smart contracts could replace legal system in places where legal system is not great (e.g. third world). This seems overly trusting.
 Smart contracts could remove obscurity or ambiguity from contracts. Could be good clarity (although a layperson may have no better chance of understanding it) but that is not always a good thing
 
+A smart contract must:
+- Not have arbitrary inputs (emotion, opinion)
+- Have a social context (cannot have only a single participant)
+- inputs must be material, mesurable, and exchangable
+
+Contract Lifecycle:
+1. Negotiation. All parties understand contract terms. Requires common
+   knowledge/common ground, which can only be updated by "grounding":
+   where parties come to new common ground
+2. Storage. A contract is stored somewhere and can be checked and monitored
+3. Execution. The contract terms are executed and followed through on in
+   full.
+4. Dispute Resolution. Any disputes about the contract execution can be
+    - Adjudicative Resolution: judge, jury, or arbitrator determines outcome of
+      contract
+    - Consensual Resolution: Negotation or collaborative law, where parties try
+      to reach an agreement
+
+A smart contract may implement this lifecycle (Negotiation is creation of the
+contract, storage on the blockchain, automatic execution). However, more
+research is needed into automatic executation for possible vulenrabilities
+(especially for contract parties and blockchain health). A smart contract may
+not perform well in the Dispute Resolution step, as it is automatically
+executed and blockchain (being append only) cannot undo the contract without
+*another smart contract*. Both resolution types suffer from this.
+
 ## Consensus and Consensus Protocols
 - Generally support the longest chain, as this removes forks and prevents inconsistent groups forming.
 - Consensus protocols allow for distributed networks to all agree on something (here, a block). In blockchain we use consensus protocols to choose who creates the next block
