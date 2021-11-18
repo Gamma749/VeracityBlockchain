@@ -18,3 +18,8 @@
 ## 2021/11/18
 - Looked at YAC protocol paper
 	- Looked at Nakamoto consensus and Byzantine vs Practical Byzantine fault tolerance
+- Worked on using iroha docker container
+	- Got example working using setup scripts, was able to use iroha-cli to add assets and transfer about
+	- Created an image with python3 and iroha python package 
+	- Created docker compose yaml file to easily boot iroha example with postgres container too
+	- Looked into using python library, analysed code
