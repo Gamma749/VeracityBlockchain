@@ -1,0 +1,3 @@
+[submodule "iroha-project/iroha"]
+	path = iroha-project/iroha
+	url = https://github.com/hyperledger/iroha.git
