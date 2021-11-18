@@ -1,0 +1,6 @@
+FROM hyperledger/iroha:latest
+COPY iroha-startup.sh /opt
+RUN /opt/iroha-startup.sh
+ENV IROHA_POSTGRES_HOST=1
+ENV KEY='node0'
+
