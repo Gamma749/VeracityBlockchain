@@ -23,3 +23,12 @@
 	- Created an image with python3 and iroha python package 
 	- Created docker compose yaml file to easily boot iroha example with postgres container too
 	- Looked into using python library, analysed code
+
+## 2021/11/19
+- Looked into python sdk for Iroha more, reading over functions offered and taking notes
+	- Look over all commands possible
+	- Understand structure of python files and how commands move through into blockchain
+- Started plans for migration to new computer
+- Got own python files with transactions and queries running over top of example single node network
+	- Now to look at developing own genesis block and users+roles
+	- Look into multinode networks
