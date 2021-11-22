@@ -32,3 +32,14 @@
 - Got own python files with transactions and queries running over top of example single node network
 	- Now to look at developing own genesis block and users+roles
 	- Look into multinode networks
+
+## Week 1 Review
+Got started on the project, began looking into blockchain and blockchain projects. Decided on using Hyperledger Iroha to start with, and began looking over documentation for configurations and Python API. Got an example multinode network running.
+
+---
+## 2021/11/22
+- Looked closer at configurations of Iroha, especially at docker configuration files
+	- Looking for options that will be useful when testing/demonstrating, like timeouts and quorums
+- Got another node running in the docker compose, for a total of four and a fault tolerance of one
+	- iroha4 is misbehaving, determining why?
+- Started refactoring code and structure so it is easier to understand and change the project eg having one gensis block.
