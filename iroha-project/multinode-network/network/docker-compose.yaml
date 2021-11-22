@@ -161,7 +161,7 @@ services:
         source: iroha-postgres-vol4
         target: /var/lib/postgresql/data
 
-    iroha4:
+  iroha4:
     image: gamma749/iroha
     container_name: iroha4
     restart: unless-stopped
