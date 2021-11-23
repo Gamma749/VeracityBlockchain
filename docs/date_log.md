@@ -43,3 +43,18 @@ Got started on the project, began looking into blockchain and blockchain project
 - Got another node running in the docker compose, for a total of four and a fault tolerance of one
 	- iroha4 is misbehaving, determining why?
 - Started refactoring code and structure so it is easier to understand and change the project eg having one gensis block.
+
+## 2021/11/23
+- Refactored directories to have shared genesis block, shared startup script, etc...
+- Fixed issue with Iroha4, turns out to be typo in IPv4 address
+- Ensured boot up singlenode and multinode iroha networks
+- Added license to git repo
+- Started plans to test multinode network in mundane ways
+	- Test connections between nodes
+	- Tets equality of nodes (can send transaction to any node)
+	- Test transactions
+	- Test commands (make a domain, user, etc)
+	- Test queries
+- Start looking at good ways to log outputs of several nodes over time
+- Ran into a bug that resulted from giving an ssh key as an argument when I should not have
+	- Error messages for Hyperledger (at least Iroha) are default, and not very useful
