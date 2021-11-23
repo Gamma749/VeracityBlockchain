@@ -8,3 +8,5 @@ Run `pytest -x -rA network_testing.py` to run some unit tests on the iroha multi
 - `-rA` means we will get more information on all tests at the end of testing, rather than just the failed tests.
 
 `network_testing.py` holds some documentation in the function docstrings about what is being tested, and the names provide a summary.
+
+Also, please note these tests were developed in python 3.10.0 and have not been checked on other versions. If you find that the tests fail on your machine, this may be the culprit, although I have not employed any 3.10 specific features.
