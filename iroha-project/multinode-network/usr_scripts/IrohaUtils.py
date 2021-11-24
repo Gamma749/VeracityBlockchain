@@ -1,6 +1,7 @@
 import os
 import binascii
 import logging
+from pathlib import Path
 from iroha import IrohaCrypto, Iroha, IrohaGrpc
 
 class bcolors:
@@ -71,6 +72,7 @@ def send_transaction(transaction, connection, verbose=False):
     """
 
     hex_hash = binascii.hexlify(IrohaCrypto.hash(transaction))
+    logging.debug(transaction)
     logging.debug('Transaction hash = {}, creator = {}'.format(
         hex_hash, transaction.payload.reduced_payload.creator_account_id))
     connection.send_tx(transaction)
@@ -79,6 +81,31 @@ def send_transaction(transaction, connection, verbose=False):
         if verbose: print(status)
         last_status = status
     return last_status
+
+@trace
+def send_batch(transactions, connection, verbose=False):
+    """Send a batch of transactions across a connection, all at once
+
+    Args:
+        transactions (list of Iroha.transaction): The signed transactions to send to a peer
+        connection (IrohaGrpc): The Grpc connection to send the transactions across
+        verbose (bool): A boolean to print the status stream to stdout
+
+    Returns:
+        Iroha Transaction Statuses: List of the final transaction status received, for each transaction in batch
+    """
+
+    connection.send_txs(transactions)
+    last_status_list = []
+    for tx in transactions:
+        hex_hash = binascii.hexlify(IrohaCrypto.hash(tx))
+        logging.debug('Transaction hash = {}, creator = {}'.format(
+            hex_hash, tx.payload.reduced_payload.creator_account_id))
+        for status in connection.tx_status_stream(tx):
+            if verbose: print(status)
+            last_status = status
+        last_status_list.append(last_status)
+    return last_status_list
 
 @trace
 def get_block(block_number, connection):
@@ -100,3 +127,50 @@ def get_block(block_number, connection):
     block = connection.send_query(query)
 
     return block
+
+@trace
+def get_all_blocks(connection):
+    """Get all blocks from a connection
+
+    Args:
+        connection (IrohaGrpc): The connection to a node to get blocks from
+
+    Returns:
+        list of JSON strings: A list of every block in JSON format from a node 
+    """
+
+    current_height = 1
+    current_block = get_block(current_height, connection)
+    block_json = []
+
+    while (current_block := get_block(current_height, connection)).error_response.error_code == 0:
+        logging.debug(f"SUCCESSFULLY GOT BLOCK {current_height}")
+        block_json.append(current_block)
+        current_height += 1
+        logging.debug(f"GETTING BLOCK {current_height}")
+    logging.debug(f"END OF CHAIN REACHED")
+    return block_json
+
+@trace
+def log_all_blocks(connection, log_name, logs_directory="logs"):
+    """Get all blocks from a node and write them to a log file in JSON format
+
+    Args:
+        connection (IrohaGrpc): The connection to a node to get blocks from
+        log_name (String): Name of file to write logs to
+        logs_directory (String, optional): Name of directory (child of current directory) to place logs into
+            Created if not currently created. Defaults to logs
+    """
+
+    path = Path(logs_directory + "/" + log_name)
+    if not os.path.exists(os.path.dirname(path)):
+        os.makedirs(os.path.dirname(path))
+
+    block_json = get_all_blocks(connection)
+
+    with open(path, "w") as f:
+        for block in block_json:
+            f.write(str(block)+"\n\n")
+
+if __name__ == "__main__":
+    logging.basicConfig(level=logging.DEBUG)
