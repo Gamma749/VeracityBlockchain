@@ -1,35 +1,7 @@
-import binascii
-from iroha import  Iroha, IrohaGrpc, IrohaCrypto
-import os
-import sys
+from operator import ne
+from IrohaUtils import *
 
-
-if sys.version_info[0] < 3:
-    raise Exception('Python 3 or more updated version is required.')
-
-
-# Iroha peer 1
-IROHA_HOST_ADDR_1 = os.getenv('IROHA_HOST_ADDR_1', '172.29.101.121')
-IROHA_PORT_1 = os.getenv('IROHA_PORT_1', '50051')
-# Iroha peer 2
-IROHA_HOST_ADDR_2 = os.getenv('IROHA_HOST_ADDR_2', '172.29.101.122')
-IROHA_PORT_2 = os.getenv('IROHA_PORT_2', '50052')
-# Iroha peer 3
-IROHA_HOST_ADDR_3 = os.getenv('IROHA_HOST_ADDR_2', '172.29.101.123')
-IROHA_PORT_3 = os.getenv('IROHA_PORT_3', '50053')
-
-# IrohaGrpc net for peer 1, 2, 3
-net_1 = IrohaGrpc('{}:{}'.format(IROHA_HOST_ADDR_1, IROHA_PORT_1))
-net_2 = IrohaGrpc('{}:{}'.format(IROHA_HOST_ADDR_2, IROHA_PORT_2))
-net_3 = IrohaGrpc('{}:{}'.format(IROHA_HOST_ADDR_3, IROHA_PORT_3))
-
-
-# Admin Account loading with Admin's private key
-ADMIN_PRIVATE_KEY = os.getenv(
-    'ADMIN_PRIVATE_KEY', 'f101537e319568c765b2cc89698325604991dca57b9716b58016b253506cab70')
-# Admin's account
-ADMIN_ACCOUNT_ID = os.getenv('ADMIN_ACCOUNT_ID', 'admin@test')
-iroha_admin = Iroha(ADMIN_ACCOUNT_ID)
+iroha_admin = iroha
 
 # Satoshi's crypto material generation for account 1
 satoshi_private_key_1 = IrohaCrypto.private_key()
@@ -55,50 +27,7 @@ print("""
 Please ensure about MST in iroha config file.
 """)
 
-
-def trace(func):
-    """
-    A decorator for tracing methods' begin/end execution points
-    """
-
-    def tracer(*args, **kwargs):
-        name = func.__name__
-        print('\tEntering "{}"'.format(name))
-        result = func(*args, **kwargs)
-        print('\tLeaving "{}"'.format(name))
-        return result
-
-    return tracer
-
-
-@trace
-def send_transaction_and_print_status(transaction):
-    """
-    Send transaction and print status
-    """
-    global net_1
-    hex_hash = binascii.hexlify(IrohaCrypto.hash(transaction))
-    print('Transaction hash = {}, creator = {}'.format(
-        hex_hash, transaction.payload.reduced_payload.creator_account_id))
-    net_1.send_tx(transaction)
-    for status in net_1.tx_status_stream(transaction):
-        print(status)
-
-
-@trace
-def send_batch_and_print_status(transactions):
-    """
-    send batch of transactions
-    """
-    global net_1
-    net_1.send_txs(transactions)
-    for tx in transactions:
-        hex_hash = binascii.hexlify(IrohaCrypto.hash(tx))
-        print('\t' + '-' * 20)
-        print('Transaction hash = {}, creator = {}'.format(
-            hex_hash, tx.payload.reduced_payload.creator_account_id))
-        # for status in net_1.tx_status_stream(tx):
-        #     print(status)
+logging.basicConfig(level=logging.DEBUG)
 
 
 @trace
@@ -138,7 +67,7 @@ def init_operation():
     '''
     init_tx = iroha_admin.transaction(init_cmds)
     IrohaCrypto.sign_transaction(init_tx, ADMIN_PRIVATE_KEY)
-    send_transaction_and_print_status(init_tx)
+    send_transaction(init_tx, net_1, True)
 
 
 @trace
@@ -167,7 +96,8 @@ def add_keys_and_set_quorum():
     '''
     satoshi_tx = iroha_satoshi_1.transaction(satoshi_cmds)
     IrohaCrypto.sign_transaction(satoshi_tx, satoshi_private_key_1)
-    send_transaction_and_print_status(satoshi_tx)
+    status = send_transaction(satoshi_tx, net_1, True)
+    logging.debug(status)
 
 
 @trace
@@ -204,7 +134,8 @@ def multi_signature_transaction():
     '''
     Finally send the transaction to Iroha Peer
     '''
-    send_transaction_and_print_status(multi_sign_tx)
+    status = send_transaction(multi_sign_tx, net_1, True)
+    logging.debug(status)
 
 
 @trace
