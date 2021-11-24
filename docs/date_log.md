@@ -58,3 +58,13 @@ Got started on the project, began looking into blockchain and blockchain project
 - Start looking at good ways to log outputs of several nodes over time
 - Ran into a bug that resulted from giving an ssh key as an argument when I should not have
 	- Error messages for Hyperledger (at least Iroha) are default, and not very useful
+
+## 2021/11/24
+- Worked more on unit tests of multinode network
+	- Enabled manual running of test script
+	- Added significant logging, including two logging levels
+- Updated IrohaUtils slightly
+- Met with supervisor, planned next steps
+- Recorded screencasts of test outputs
+- Created repo for archive of project and example testing
+- Pushed my Iroha image to docker hub
