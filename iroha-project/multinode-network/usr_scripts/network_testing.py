@@ -6,12 +6,10 @@ This module assumes a fresh network, so make sure to run manage-network restart
 Also note these tests are ordered. Some tests create objects that will be used by later tests
 Do NOT employ pytest-random, as tests will fail. This is intended
 """
-from operator import le
 from IrohaUtils import *
 import pytest
 import logging
 import socket
-import sys
 
 def node_locations():
     return[
@@ -20,7 +18,6 @@ def node_locations():
         (IROHA_HOST_ADDR_3, int(IROHA_PORT_3)),
         (IROHA_HOST_ADDR_4, int(IROHA_PORT_4)),
     ]
-
 
 @pytest.fixture(name="node_locations")
 def node_locations_fixture():
