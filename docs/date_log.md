@@ -68,3 +68,9 @@ Got started on the project, began looking into blockchain and blockchain project
 - Recorded screencasts of test outputs
 - Created repo for archive of project and example testing
 - Pushed my Iroha image to docker hub
+
+## 2021/11/25
+- Started looking into malicious actor actions
+	- Wanting to prove that network is resilient against a malicious user trying to break it
+- Looking into async, threading packages in python, to quickly send requests from one user to several peers (so the network must deal with several conflicting proposals at the same time)
+- Started code for unit testing malicious client actions
