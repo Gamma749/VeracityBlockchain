@@ -79,6 +79,7 @@ def send_transaction(transaction, connection, verbose=False):
     last_status = None
     for status in connection.tx_status_stream(transaction):
         if verbose: print(status)
+        logging.debug(status)
         last_status = status
     return last_status
 
