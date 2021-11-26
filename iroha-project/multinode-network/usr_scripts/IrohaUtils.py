@@ -34,7 +34,7 @@ ADMIN_ACCOUNT_ID = os.getenv('ADMIN_ACCOUNT_ID', 'admin@test')
 ADMIN_PRIVATE_KEY = os.getenv(
     'ADMIN_PRIVATE_KEY', 'f101537e319568c765b2cc89698325604991dca57b9716b58016b253506cab70')
 
-iroha = Iroha(ADMIN_ACCOUNT_ID)
+iroha_admin = Iroha(ADMIN_ACCOUNT_ID)
 net_1 = IrohaGrpc('{}:{}'.format(IROHA_HOST_ADDR_1, IROHA_PORT_1), timeout=10)
 net_2 = IrohaGrpc('{}:{}'.format(IROHA_HOST_ADDR_2, IROHA_PORT_2), timeout=10)
 net_3 = IrohaGrpc('{}:{}'.format(IROHA_HOST_ADDR_3, IROHA_PORT_3), timeout=10)
@@ -123,7 +123,7 @@ def get_block(block_number, connection):
         Exception if block height is invalid, or if connection is invalid
     """
 
-    query = iroha.query("GetBlock", height=block_number)
+    query = iroha_admin.query("GetBlock", height=block_number)
     IrohaCrypto.sign_query(query, ADMIN_PRIVATE_KEY)
     block = connection.send_query(query)
 
@@ -175,3 +175,29 @@ def log_all_blocks(connection, log_name, logs_directory="logs"):
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG)
+
+def new_user(user_name, domain_name):
+    """
+    Create the data for a new user and return it
+    Includes public and private keys
+
+    Args:
+        user_name (String): The name of the new user
+        domain_name (String): The name of the domain the user is to be placed in
+
+    Returns:
+        Dictionary : A key-value store of user_id, public and private keys
+    """
+
+    priv_key = IrohaCrypto.private_key()
+    pub_key = IrohaCrypto.derive_public_key(priv_key)
+    id = user_name + "@" + domain_name
+
+    return {
+        "id": id,
+        "name": user_name,
+        "domain": domain_name,
+        "public_key": pub_key,
+        "private_key": priv_key,
+        "iroha": Iroha(id)
+    }
