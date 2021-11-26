@@ -1,5 +1,7 @@
 # Veracity Blockchain project - Log
 ## Hayden McAlister
+
+Dates are in YYYY/MM/DD format.
 ---
 ## 2021/11/15
 - Familarised self with blockchain, watched MIT course on blockchain technology
@@ -74,3 +76,9 @@ Got started on the project, began looking into blockchain and blockchain project
 	- Wanting to prove that network is resilient against a malicious user trying to break it
 - Looking into async, threading packages in python, to quickly send requests from one user to several peers (so the network must deal with several conflicting proposals at the same time)
 - Started code for unit testing malicious client actions
+
+## 2021/11/26
+- Wrote more tests on malicious clients
+- Refactored a lot of code in unit testing, to more easily generate users and improve readability
+- Finished malicious client scenarios, and updated unit tests to demonstrate these
+- Added final functionality to malicious client testing, including logging
