@@ -1,6 +1,5 @@
-.gitignore
 *._*
-indy-sdk/
 __pycache__
 .pytest_cache
 .vscode
+*_logs/
