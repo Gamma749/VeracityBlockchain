@@ -56,11 +56,11 @@ def test_create_domain():
 
     logging.info("ATTEMPTING TO CREATE DOMAIN pytest")
     commands = [
-        iroha.command('CreateDomain', domain_id='pytest', default_role='user')
+        iroha_admin.command('CreateDomain', domain_id='pytest', default_role='user')
     ]
 
     tx = IrohaCrypto.sign_transaction(
-        iroha.transaction(commands), ADMIN_PRIVATE_KEY)
+        iroha_admin.transaction(commands), ADMIN_PRIVATE_KEY)
     logging.debug(tx)
     status = send_transaction(tx, net_1)
     logging.debug(status)
@@ -75,12 +75,12 @@ def test_create_asset():
 
     logging.info("ATTEMPTING TO CREATE ASSET coin#pytest")
     commands = [
-        iroha.command('CreateAsset', asset_name='coin',
+        iroha_admin.command('CreateAsset', asset_name='coin',
                       domain_id='pytest', precision=2)
     ]
 
     tx = IrohaCrypto.sign_transaction(
-        iroha.transaction(commands), ADMIN_PRIVATE_KEY)
+        iroha_admin.transaction(commands), ADMIN_PRIVATE_KEY)
     logging.debug(tx)
     status = send_transaction(tx, net_1)
     logging.debug(status)
@@ -94,8 +94,8 @@ def test_add_asset():
     """
 
     logging.info("ATTEMPTING TO ADD 1000 coin#pytest TO admin@test")
-    tx = iroha.transaction([
-        iroha.command('AddAssetQuantity',
+    tx = iroha_admin.transaction([
+        iroha_admin.command('AddAssetQuantity',
                       asset_id='coin#pytest', amount='1000.00')
     ])
     tx = IrohaCrypto.sign_transaction(tx, ADMIN_PRIVATE_KEY)
@@ -117,8 +117,8 @@ def test_create_users(node_grpcs):
         logging.info(f"\tCREATE USER{i+1} ON NODE_{i+1}")
         user_private_key = IrohaCrypto.private_key()
         user_public_key = IrohaCrypto.derive_public_key(user_private_key)
-        tx = iroha.transaction([
-            iroha.command('CreateAccount', account_name=f'user{i+1}', domain_id='pytest',
+        tx = iroha_admin.transaction([
+            iroha_admin.command('CreateAccount', account_name=f'user{i+1}', domain_id='pytest',
                           public_key=user_public_key)
         ])
         IrohaCrypto.sign_transaction(tx, ADMIN_PRIVATE_KEY)
@@ -138,8 +138,8 @@ def test_transfer_asset_to_users(node_grpcs):
     
     for i, node_grpc in enumerate(node_grpcs):
         logging.info(f"\tTRANSFER TO USER{i+1} VIA NODE_{i+1}")
-        tx = iroha.transaction([
-            iroha.command('TransferAsset', src_account_id='admin@test', dest_account_id=f'user{i+1}@pytest',
+        tx = iroha_admin.transaction([
+            iroha_admin.command('TransferAsset', src_account_id='admin@test', dest_account_id=f'user{i+1}@pytest',
                           asset_id='coin#pytest', description='Top Up', amount=f'{(i+1)*1.11}')
         ])
         IrohaCrypto.sign_transaction(tx, ADMIN_PRIVATE_KEY)
@@ -157,7 +157,7 @@ def test_query_on_asset(node_grpcs):
 
     for i, node_grpc in enumerate(node_grpcs):
         logging.info(f"\tQUERY OVER NODE_{i+1}")
-        query = iroha.query('GetAssetInfo', asset_id='coin#pytest')
+        query = iroha_admin.query('GetAssetInfo', asset_id='coin#pytest')
         IrohaCrypto.sign_query(query, ADMIN_PRIVATE_KEY)
         response = node_grpc.send_query(query)
         data = response.asset_response.asset
