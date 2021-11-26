@@ -577,3 +577,11 @@ if __name__=="__main__":
     set_user_asset_balance()
     test_replay_others_transaction()
     print(f"{'-'*80}\n\n")
+
+    logging.debug("FINISHED BASIC NETWORK TESTS")
+    logging.debug("SAVING LOGS TO malicious_client_testing DIRECTORY")
+
+    logging.info("SAVE BLOCKCHAIN LOGS TO malicious_client_testing_logs/")
+    for i, grpc in enumerate(node_grpcs()):
+        logging.info(f"\tSAVING LOGS OF node{i+1}")
+        log_all_blocks(grpc, f"node{i+1}.log", "malicious_client_testing_logs")
