@@ -53,7 +53,7 @@ Got started on the project, began looking into blockchain and blockchain project
 - Added license to git repo
 - Started plans to test multinode network in mundane ways
 	- Test connections between nodes
-	- Tets equality of nodes (can send transaction to any node)
+	- Test equality of nodes (can send transaction to any node)
 	- Test transactions
 	- Test commands (make a domain, user, etc)
 	- Test queries
@@ -82,3 +82,12 @@ Got started on the project, began looking into blockchain and blockchain project
 - Refactored a lot of code in unit testing, to more easily generate users and improve readability
 - Finished malicious client scenarios, and updated unit tests to demonstrate these
 - Added final functionality to malicious client testing, including logging
+
+## Week 2 Summary
+- Got a full four node network running with docker
+- Added unit tests for expected network behavior
+- Added unit tests for malicious client behavior
+- Added demonstration of running tests
+
+---
+## 2021/11/29
