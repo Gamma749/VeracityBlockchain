@@ -1,5 +1,7 @@
 *._*
 __pycache__
 .pytest_cache
+.gitignore
 .vscode
 *_logs/
+*.log
