@@ -91,3 +91,13 @@ Got started on the project, began looking into blockchain and blockchain project
 
 ---
 ## 2021/11/29
+- Looked over iroha-python structure, inspecting to see if it is possible to create a malicious peer in this way
+	- Seems like using the python API in this way can only get us so far...
+	- Maybe some sort of MITM? Add extra transactions to a block and try to get them verified?
+- Looked into C++ Iroha structure. VERY dense, difficult to decipher.
+	- Possible that crudely altering some files could produce faulty node, but having decent control would require understanding a large amount of the project...
+	- Looking into just the YAC C++ could be useful, playing around with consensus
+- New plan: Put a hash of a document on the blockchain
+	- Looking into the start of abstraction of blockchain to separate claims and validation
+	- First step, pre-register documents on a blockchain without revealing the documents
+	
