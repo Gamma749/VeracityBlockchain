@@ -101,3 +101,8 @@ Got started on the project, began looking into blockchain and blockchain project
 	- Looking into the start of abstraction of blockchain to separate claims and validation
 	- First step, pre-register documents on a blockchain without revealing the documents
 	
+## 2021/11/30
+- Played around with jupyter notebook in docker containers
+- Looked into swi-prolog, and poked about the docker image
+- Had a false start using jupyter notebook as a base image, should have used SWIPL as a base image
+- Got my own custom image to run jupyter notebook with SWIPL kernel
