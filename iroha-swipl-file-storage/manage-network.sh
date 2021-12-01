@@ -2,7 +2,7 @@
 function up(){
 
     docker-compose -f network/docker-compose.yaml up -d
-    docker logs notebook-swipl -f
+    docker logs swipl-notebook
     
 }
 
@@ -16,7 +16,6 @@ function unpause(){
 function down(){
 
     docker-compose -f network/docker-compose.yaml down --volumes --remove-orphans
-    docker image rm network_swipl-notebook
 }
 
 function restart(){
