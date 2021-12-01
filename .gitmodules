@@ -1,6 +1,9 @@
 [submodule "iroha-project/singlenode-network/iroha"]
 	path = iroha-project/singlenode-network/iroha
 	url = https://github.com/hyperledger/iroha
+[submodule "iroha-swipl-file-storage/network/swipl/setup/jupyter-swi-prolog"]
+	path = iroha-swipl-file-storage/network/swipl/setup/jupyter-swi-prolog
+	url = https://github.com/veracitylab/jupyter-swi-prolog
 [submodule "prolog-docker/setup/jupyter-swi-prolog"]
 	path = prolog-docker/setup/jupyter-swi-prolog
 	url = https://github.com/veracitylab/jupyter-swi-prolog
