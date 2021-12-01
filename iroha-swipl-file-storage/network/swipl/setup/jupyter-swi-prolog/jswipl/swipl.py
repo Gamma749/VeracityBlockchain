@@ -1,0 +1,142 @@
+from logging import INFO
+from pyswip import Prolog
+from pyswip import Functor
+from pyswip.prolog import PrologError
+from .IrohaUtils import *
+from iroha import primitive_pb2
+from pathlib import Path
+import re
+
+DEFAULT_LIMIT = 10
+DOMAIN_NAME = "document"
+user = new_user("user", DOMAIN_NAME)
+iroha_setup = False
+logging.basicConfig(level=INFO)
+
+
+def setup_iroha():
+    commands = [
+        # Create a new role that can only create assets (i.e. create hashes) and read assets (to see if they exist)
+        iroha_admin.command("CreateRole", role_name="document_creator", permissions=[
+                primitive_pb2.can_create_asset,
+                primitive_pb2.can_read_assets
+            ]),
+        # Create a new domain that has document_creator as role
+        iroha_admin.command("CreateDomain", domain_id=DOMAIN_NAME, default_role="document_creator"),
+        iroha_admin.command('CreateAccount', account_name=user["name"], domain_id=DOMAIN_NAME,
+                            public_key=user["public_key"])
+    ]
+    # Sign and send set up block
+    tx = IrohaCrypto.sign_transaction(
+            iroha_admin.transaction(commands), ADMIN_PRIVATE_KEY)
+    status = send_transaction(tx, net_1)
+    logging.info(status)
+    print(status)
+    return status[0] == "COMMITTED"
+
+def format_value(value):
+    output = ""
+    if isinstance(value, list):
+        output = "[ " + ", ".join([format_value(val) for val in value]) + " ]"
+    elif isinstance(value, Functor) and value.arity == 2:
+        output = "{0}{1}{2}".format(value.args[0], value.name, value.args[1])
+    else:
+        output = "{}".format(value)
+
+    return output
+
+def format_result(result):
+    result = list(result)
+
+    if len(result) == 0:
+        return "false."
+
+    if len(result) == 1 and len(result[0]) == 0:
+        return "true."
+
+    output = ""
+    for res in result:
+        tmpOutput = []
+        for var in res:
+            tmpOutput.append(var + " = " + format_value(res[var]))
+        output += ", ".join(tmpOutput) + " ;\n"
+    output = output[:-3] + " ."
+
+    return output
+
+def run(code):
+    global iroha_setup
+    
+    while not iroha_setup:
+        iroha_setup = setup_iroha()
+
+    prolog = Prolog()
+
+    output = []
+    ok = True
+    tmp = ""
+    clauses = []
+    isQuery = False
+    cell_files_dir = Path(Path.cwd(), "consulted_cells")
+    cell_files_dir.mkdir(mode=755, exist_ok=True)
+    cell_file_name = "cell.pl"
+    for line in code.split("\n"):
+        line = line.strip()
+        match = re.fullmatch(r"%\s*[Ff]ile:\s*(\w+.*)", line)
+        if match is not None:
+            cell_file_name = match.group(1)
+            if not cell_file_name.endswith(".pl"):
+                cell_file_name += ".pl"
+        if line == "" or line[0] == "%":
+            continue
+        if line[:2] == "?-":
+            isQuery = True
+            line = line[2:]
+            tmp += " " + line
+        else:
+            clauses.append(line)
+
+        if isQuery and tmp[-1] == ".":
+            # End of statement
+            tmp = tmp[:-1] # Removes "."
+            maxresults = DEFAULT_LIMIT
+            # Checks for maxresults
+            if tmp[-1] == "}":
+                tmp = tmp[:-1] # Removes "}"
+                limitStart = tmp.rfind('{')
+                if limitStart == -1:
+                    ok = False
+                    output.append("ERROR: Found '}' before '.' but opening '{' is missing!")
+                else:
+                    limit = tmp[limitStart+1:]
+                    try:
+                        maxresults = int(limit)
+                    except:
+                        ok = False
+                        output.append("ERROR: Invalid limit {" + limit + "}!")
+                    tmp = tmp[:limitStart]
+
+            try:
+                if isQuery:
+                    result = prolog.query(tmp, maxresult=maxresults)
+                    output.append(format_result(result))
+                    result.close()
+
+            except PrologError as error:
+                ok = False
+                output.append("ERROR: {}".format(error))
+            tmp = ""
+            isQuery = False
+    if len(clauses) > 0:
+        path = Path(cell_files_dir, cell_file_name)
+        try:
+            #f = open("foo.pl", 'w+')
+            f = open(path, 'w+')
+            f.write('\n'.join(clauses))
+        finally:
+            f.close()
+            prolog.consult(f.name)
+        if not find_hash_on_chain(user, md5_hash(path)):
+            store_hash_on_chain(user, md5_hash(path))
+            log_all_blocks(net_1, "blocks.log")
+    return output, ok
