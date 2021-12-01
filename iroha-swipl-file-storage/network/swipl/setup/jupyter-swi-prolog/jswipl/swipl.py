@@ -1,38 +1,22 @@
-from logging import INFO
+import logging
 from pyswip import Prolog
 from pyswip import Functor
 from pyswip.prolog import PrologError
+import time
+import pickle
 from .IrohaUtils import *
-from iroha import primitive_pb2
 from pathlib import Path
 import re
 
+
+logging.basicConfig(level=logging.INFO)
+TIMESTAMPING = True
 DEFAULT_LIMIT = 10
-DOMAIN_NAME = "document"
-user = new_user("user", DOMAIN_NAME)
-iroha_setup = False
-logging.basicConfig(level=INFO)
+user=None
+with open("/notebooks/iroha_connection/user_data.pkl", "rb") as user_data:
+    user = pickle.load(user_data)
+logging.debug(user)
 
-
-def setup_iroha():
-    commands = [
-        # Create a new role that can only create assets (i.e. create hashes) and read assets (to see if they exist)
-        iroha_admin.command("CreateRole", role_name="document_creator", permissions=[
-                primitive_pb2.can_create_asset,
-                primitive_pb2.can_read_assets
-            ]),
-        # Create a new domain that has document_creator as role
-        iroha_admin.command("CreateDomain", domain_id=DOMAIN_NAME, default_role="document_creator"),
-        iroha_admin.command('CreateAccount', account_name=user["name"], domain_id=DOMAIN_NAME,
-                            public_key=user["public_key"])
-    ]
-    # Sign and send set up block
-    tx = IrohaCrypto.sign_transaction(
-            iroha_admin.transaction(commands), ADMIN_PRIVATE_KEY)
-    status = send_transaction(tx, net_1)
-    logging.info(status)
-    print(status)
-    return status[0] == "COMMITTED"
 
 def format_value(value):
     output = ""
@@ -65,10 +49,6 @@ def format_result(result):
     return output
 
 def run(code):
-    global iroha_setup
-    
-    while not iroha_setup:
-        iroha_setup = setup_iroha()
 
     prolog = Prolog()
 
@@ -130,13 +110,23 @@ def run(code):
     if len(clauses) > 0:
         path = Path(cell_files_dir, cell_file_name)
         try:
-            #f = open("foo.pl", 'w+')
+            logging.info(f"Write file {cell_file_name}")
             f = open(path, 'w+')
+            # Time stamp the file to ensure hash can be stored
+            timestamp = time.time_ns()
+            if TIMESTAMPING:
+                clauses.insert(0, f"% {timestamp}")
+            logging.debug(clauses)
             f.write('\n'.join(clauses))
         finally:
             f.close()
             prolog.consult(f.name)
-        if not find_hash_on_chain(user, md5_hash(path)):
-            store_hash_on_chain(user, md5_hash(path))
-            log_all_blocks(net_1, "blocks.log")
+        # If vital to never put hash on twice, check first
+        # Iroha does this for us though
+        # if not find_hash_on_chain(user, md5_hash(path)):
+        file_hash = md5_hash(path)
+        logging.info(f"Log file {cell_file_name} hash {file_hash} on blockchain")
+        store_hash_on_chain(user, file_hash)
+        log_all_blocks(net_1, "blocks.log")
+        output.append(f"File: {cell_file_name}\nTimestamp: {timestamp}\nHash: {file_hash}")
     return output, ok

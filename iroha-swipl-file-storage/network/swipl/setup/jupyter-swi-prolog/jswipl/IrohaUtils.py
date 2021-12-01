@@ -174,8 +174,6 @@ def log_all_blocks(connection, log_name, logs_directory="logs"):
         for block in block_json:
             f.write(str(block)+"\n\n")
 
-if __name__ == "__main__":
-    logging.basicConfig(level=logging.DEBUG)
 
 def new_user(user_name, domain_name):
     """
@@ -242,8 +240,9 @@ def store_hash_on_chain(user, h, connection=net_1):
     ]
     tx = IrohaCrypto.sign_transaction(
         user["iroha"].transaction(commands), user["private_key"])
+    logging.debug(tx)
     status = send_transaction(tx, net_1)
-    logging.info(status)
+    logging.debug(status)
     return status
 
 @trace
@@ -262,7 +261,12 @@ def find_hash_on_chain(user, h, connection=net_1):
     
     query = user["iroha"].query("GetAssetInfo", asset_id=f"{h}#{user['domain']}")
     query = IrohaCrypto.sign_query(query, user["private_key"])
+    logging.debug(query)
     response = connection.send_query(query)
-    logging.info(response)
+    logging.debug(response)
     #Check if response has an asset id matching the hash we are after
     return response.asset_response.asset.asset_id==h+f"#{user['domain']}"
+
+
+if __name__ == "__main__":
+    logging.basicConfig(level=logging.DEBUG)
