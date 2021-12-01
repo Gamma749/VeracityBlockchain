@@ -22,7 +22,10 @@ Notebooks are saved to persistent storage on the host in the `network/swipl/note
 
 Using magic file notation (putting `%file: filename.pl` at the top of a prolog cell), that file will be hashed and stored on the Iroha blockchain running on the iroha containers. This provides a record of what files were activated and when, which could be used to detect inconsistencies in a prolog environment.
 
-A log of the blockchain is stored after each new file is stored on the chain. The logs are stored in `network/swipl/notebooks/logs` due to a quirk in how jupyter notebook kernels work.
+A log of the blockchain is stored after each new file is stored on the chain. The logs are stored in `network/swipl/notebooks/logs` due to a quirk in how jupyter notebook kernels run.
 
-## TODO
-Currently, if a file is in state A, then changes to state B, then back to state A, the second iteration of state A will not be stored on the chain. This is because the hashing process cannot follow the state of a single file, so it does not know that the state B hash is an update to the same file. This could be fixed/hacked together by adding a timestamp to the file at save time.
+## Extra Peculiarities
+- To ensure a cell can be updated several times (possibly even reverting to an earlier state) and still be hashed onto the Iroha network, we added a timestamp (python `time.time_ns()`) in a prolog comment at the top of each magic file. This ensure each time a file is created the hash will be different and thus stored on chain.
+- To allow multiple notebooks to be opened in a single session, all Iroha setup on the SWIPL-notebook container happens *before* the notebook is run. This includes creating a new Iroha user, creating the role, defining permissions, and creating the domain. The user data is stored (using pickle) into a file so every opened notebook can get a copy and send file hashes to Iroha.
+    - Currently this makes the folder management a bit of a mess. The `iroha-setup.py` script is stored in the kernel folder for access to `IrohaUtils.py`, and the user data file is stored with the notebooks (for no other reason than it worked at the time). Cleaning this up in future would be nice
+    - The Iroha setup means this container has access to the admin Iroha user. This should not be used in a production environment, but then again neither should any of this network as Iroha is not designed for storing file hashes. **This is a proof of concept only.**
