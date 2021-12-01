@@ -1,0 +1,3 @@
+notebooks/*
+!notebooks/*.ipynb
+!notebooks/consulted_cells
