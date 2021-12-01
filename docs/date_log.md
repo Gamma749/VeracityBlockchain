@@ -106,3 +106,9 @@ Got started on the project, began looking into blockchain and blockchain project
 - Looked into swi-prolog, and poked about the docker image
 - Had a false start using jupyter notebook as a base image, should have used SWIPL as a base image
 - Got my own custom image to run jupyter notebook with SWIPL kernel
+
+## 2021/12/1
+- Got Stephens swipl container and managed to run it on my machine
+- Integrated swipl container into Iroha docker-compose 
+- Integrated Iroha package into swipl jupyter kernels
+- Got swipl magic files to be hashed and stored on the blockchain
