@@ -112,3 +112,13 @@ Got started on the project, began looking into blockchain and blockchain project
 - Integrated swipl container into Iroha docker-compose 
 - Integrated Iroha package into swipl jupyter kernels
 - Got swipl magic files to be hashed and stored on the blockchain
+
+## 2021/12/2
+- Worked on SWIPL notebook kernel and Iroha integration
+	- Allowed multiple notebooks to be used in a single session
+	- Added timestamping so one file can be hashed multiple times (even in same state)
+	- Moved Iroha setup to container start, not at first cell runtime
+
+## 2021/12/3
+- Added magic %ENV to swipl kernel to change important variables on the fly
+- Updated Iroha images to reflect deprecations
