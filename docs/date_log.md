@@ -14,7 +14,7 @@ Dates are in YYYY/MM/DD format.
 ## 2021/11/17
 - Meeting with David + Stephen, discussed veracity in project and goals
 - Looked over Sawtooth: Very opaque API but seems powerful + modular
-- Looked over Iroha: Very simple API with explainations
+- Looked over Iroha: Very simple API with explanations
 - Got Iroha docker container running
 
 ## 2021/11/18
@@ -44,12 +44,12 @@ Got started on the project, began looking into blockchain and blockchain project
 	- Looking for options that will be useful when testing/demonstrating, like timeouts and quorums
 - Got another node running in the docker compose, for a total of four and a fault tolerance of one
 	- iroha4 is misbehaving, determining why?
-- Started refactoring code and structure so it is easier to understand and change the project eg having one gensis block.
+- Started refactoring code and structure so it is easier to understand and change the project eg having one genesis block.
 
 ## 2021/11/23
 - Refactored directories to have shared genesis block, shared startup script, etc...
 - Fixed issue with Iroha4, turns out to be typo in IPv4 address
-- Ensured boot up singlenode and multinode iroha networks
+- Ensured boot up single node and multinode iroha networks
 - Added license to git repo
 - Started plans to test multinode network in mundane ways
 	- Test connections between nodes
@@ -122,3 +122,6 @@ Got started on the project, began looking into blockchain and blockchain project
 ## 2021/12/3
 - Added magic %ENV to swipl kernel to change important variables on the fly
 - Updated Iroha images to reflect deprecations
+
+## Week 3 Summary
+Put plans for node failure testing on hold, focused on implementing file hashing and storage on Iroha blockchain. Got jupyter notebooks running on Docker containers, and loaded SWIPL kernel. Added Iroha functionality to SWIPL kernel to hash magic consultation files and store hash on chain.
