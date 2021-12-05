@@ -125,3 +125,13 @@ Got started on the project, began looking into blockchain and blockchain project
 
 ## Week 3 Summary
 Put plans for node failure testing on hold, focused on implementing file hashing and storage on Iroha blockchain. Got jupyter notebooks running on Docker containers, and loaded SWIPL kernel. Added Iroha functionality to SWIPL kernel to hash magic consultation files and store hash on chain.
+---
+
+## 2021/12/6
+- Meeting with supervisors
+	- Get a very basic "hello, world!" kind of thing running with prolog on blockchain
+	- Get communication happening between parties using blockchain verification
+	- introduce hidden and open knowledge, both hashed on chain
+- Looked into logging and differences in log levels in Iroha
+- looked at altering file hashing to track each file individually, by altering domains
+- looked into getting state of files by tracking domains and latest hashes
