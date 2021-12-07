@@ -5,7 +5,7 @@ from pyswip import Functor
 from pyswip.prolog import PrologError
 import time
 import pickle
-from .IrohaUtils import *
+from IrohaUtils import *
 from pathlib import Path
 import re
 
@@ -21,6 +21,7 @@ with open("/notebooks/iroha_connection/user_data.pkl", "rb") as user_data:
     user = pickle.load(user_data)
 logging.debug(user)
 
+custodian = IrohaHashCustodian()
 
 def format_value(value):
     output = ""
@@ -157,10 +158,11 @@ def run(code):
         # Iroha does this for us though
         # if not find_hash_on_chain(user, md5_hash(path)):
         if BLOCKCHAIN_LOGGING:
-            file_hash = md5_hash(path)
+            file_hash = custodian.get_file_hash(path)
+            domain_name = user["name"]+"-"+cell_file_name[:cell_file_name.find(".")]
             logging.info(f"File {cell_file_name} hash {file_hash} logging on blockchain")
-            status = store_hash_on_chain(user, file_hash)[0]
-            logging.info(f"File {cell_file_name} hash {file_hash} logged with response {status}")
+            status = custodian.store_hash_on_chain(user, file_hash, domain_name=domain_name)[0]
+            logging.info(f"File {cell_file_name} hash {file_hash} logged to domain {domain_name} with response {status}")
             log_all_blocks(net_1, "blocks.log")
-            output.append(f"File: {cell_file_name}\nTimestamp: {timestamp}\nHash: {file_hash}\nIroha Response: {status}")
+            output.append(f"File: {cell_file_name}\nTimestamp: {timestamp}\nHash: {file_hash}\nDomain: {domain_name}\nIroha Response: {status}")
     return output, ok
