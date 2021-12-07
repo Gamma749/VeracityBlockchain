@@ -2,6 +2,7 @@ import os
 import binascii
 import logging
 from pathlib import Path
+import re
 from google.protobuf.symbol_database import Default
 from iroha import IrohaCrypto, Iroha, IrohaGrpc, primitive_pb2
 import hashlib
@@ -245,6 +246,25 @@ class IrohaHashCustodian():
     Iroha demands 32 character asset names, so we are restricted greatly in output size
     """
     hash_function = hashlib.md5
+    default_role_name = "null_role"
+
+    @trace
+    def __init__(self):
+        # Ensure default role exists
+        q = iroha_admin.query("GetRoles")
+        q = IrohaCrypto.sign_query(q, ADMIN_PRIVATE_KEY)
+        response = net_1.send_query(q)
+        if self.default_role_name not in response.roles_response.roles:
+            commands = [
+                iroha_admin.command("CreateRole", role_name="null_role", permissions=[
+            
+                ])
+            ]
+            tx = IrohaCrypto.sign_transaction(
+                iroha_admin.transaction(commands), ADMIN_PRIVATE_KEY)
+            logging.debug(tx)
+            status = send_transaction(tx, net_1)
+            logging.debug(status)
 
     @trace
     def get_file_hash(self, filename):
@@ -280,6 +300,37 @@ class IrohaHashCustodian():
         return self.hash_function(obj).hexdigest()
 
     @trace
+    def _admin_create_domain(self, domain_name):
+        """
+        Create a new domain, according to admins specifications
+        This function exists so a user cannot make a domain with a specific role, as now admin gets to control this
+        This function requires existence of a null_role. Passing in a role would defeat the purpose of this function
+
+
+        Args:
+            domain_name (String): The domain name to create
+
+        Return:
+            Boolean: True if domain exists, False otherwise
+        """
+
+        commands = [
+            iroha_admin.command("CreateDomain", domain_id=domain_name, default_role="null_role")
+        ]
+        tx = IrohaCrypto.sign_transaction(
+            iroha_admin.transaction(commands), ADMIN_PRIVATE_KEY)
+        logging.debug(tx)
+        status = send_transaction(tx, net_1)
+        logging.debug(status)
+        if status[0]=="COMMITTED":
+            logging.debug(f"New domain \"{domain_name}\" created")
+        else:
+            logging.debug(f"Domain \"{domain_name}\" already exists")
+
+        # Domain will always exist, look into False case later
+        return True
+
+    @trace
     def store_hash_on_chain(self, user, h, domain_name=None, connection=net_1):
         """
         Take the hex digest of a message and store this on the blockchain as the name of an asset
@@ -300,7 +351,7 @@ class IrohaHashCustodian():
             domain_name = user["domain"]
 
         # Try to create the domain, true if domain now exists, false otherwise
-        status = admin_create_domain(domain_name)
+        status = self._admin_create_domain(domain_name)
         if not status:
             logging.info("Domain failed to exist!")
             # Let method continue so rejected status can be passed
