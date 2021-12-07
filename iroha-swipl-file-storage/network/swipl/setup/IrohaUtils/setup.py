@@ -1,5 +1,8 @@
-from distutils.core import setup
-setup(name='IrohaUtils',
-      version='1.0',
-      py_modules=['IrohaUtils'],
-      )
+import setuptools
+
+setuptools.setup(
+    name="IrohaUtils",
+    version="1.0",
+    author="Hayden McAlister",
+    description="A collection of utilities for Hyperledger Iroha",
+)
