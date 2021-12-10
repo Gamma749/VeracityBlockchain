@@ -135,3 +135,28 @@ Put plans for node failure testing on hold, focused on implementing file hashing
 - Looked into logging and differences in log levels in Iroha
 - looked at altering file hashing to track each file individually, by altering domains
 - looked into getting state of files by tracking domains and latest hashes
+
+## 2021/12/7
+- Got new jupyter-prolog image up and running using the prolog image as a base. This allows for the newest prolog version to be used and update all dependencies in  a single rebuild.
+- Changed file hashing to automate domain names as user/file combination, which allows for easy tracking of one file
+
+## 2021/12/8
+- Updated SWIPL kernel to work with magic python syntax
+- Worked on getting images to display using magic python syntax
+
+## 2021/12/9
+- Update SWIPL kernel magic python syntax to accept multi-line (technically block) code
+- Added a file custodian to file hashing examples
+- Added a blockstore to custodian to cache/remember the assets already seen
+- Added threading to blockstore
+
+## 2021/12/10
+- Added non-threading option to blockstore to improve performance
+- Made blockstore default in custodian
+- Cleaned example repos for file hashing and swipl notebook examples
+- Made release of file hashing and swipl notebook
+- Cleaned VeracityBlockchain repo to remove projects that have grown beyond it
+
+## Week 4 Summary
+Improved prolog kernel to add Iroha integration and python support. Gave Kate a platform to run python code in kernel. Added a lot of functionality to file hashing examples. Added ability to specify the domain to hash to, meaning we can track each file as it is updated. Added caching to blockchain queries for file assets, and threading ability to listen for new blocks. Updated examples for file hashing and notebook examples, and published these as releases.
+---
