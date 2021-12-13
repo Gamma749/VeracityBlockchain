@@ -160,3 +160,12 @@ Put plans for node failure testing on hold, focused on implementing file hashing
 ## Week 4 Summary
 Improved prolog kernel to add Iroha integration and python support. Gave Kate a platform to run python code in kernel. Added a lot of functionality to file hashing examples. Added ability to specify the domain to hash to, meaning we can track each file as it is updated. Added caching to blockchain queries for file assets, and threading ability to listen for new blocks. Updated examples for file hashing and notebook examples, and published these as releases.
 ---
+
+## 2021/12/13
+- Meeting with supervisors
+- Look into other blockchains
+	- Indy
+	- Hedera
+	- Cardano
+- Plan: Get a minimal example working for each blockchain, document ease of working with each + pros and cons
+- Particular interest in smart contract support on each
