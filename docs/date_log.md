@@ -169,3 +169,7 @@ Improved prolog kernel to add Iroha integration and python support. Gave Kate a 
 	- Cardano
 - Plan: Get a minimal example working for each blockchain, document ease of working with each + pros and cons
 - Particular interest in smart contract support on each
+
+## 2021/12/14
+- Since it seems every blockchain is built atop Haskell, learning some Haskell
+	- What a crazy, crazy, language
