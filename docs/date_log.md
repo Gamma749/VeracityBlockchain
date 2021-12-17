@@ -173,3 +173,12 @@ Improved prolog kernel to add Iroha integration and python support. Gave Kate a 
 ## 2021/12/14
 - Since it seems every blockchain is built atop Haskell, learning some Haskell
 	- What a crazy, crazy, language
+
+## 2021/12/16
+- Added the ability to store hashes in a REDIS database, and retrieve the files from a has
+- Also added REGEX to magic command matching, to allow for spaces
+
+## 2021/12/17
+- Continue to learn Haskell
+- Also looked into lambda calculus, since it cropped up
+- Tried some problems in Haskell, slow process
